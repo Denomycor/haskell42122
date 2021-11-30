@@ -4,10 +4,10 @@ module Cypher(
 ) where
 
 isUpperCase :: Char -> Bool
-isUpperCase = flip elem ['A', 'B'..'Z']
+isUpperCase = flip elem ['A'..'Z']
 
 isLowerCase :: Char -> Bool
-isLowerCase = flip elem ['a', 'b'..'z']
+isLowerCase = flip elem ['a'..'z']
 
 isPunctuation :: Char -> Bool 
 isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
