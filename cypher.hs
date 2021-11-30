@@ -1,12 +1,16 @@
 
+module Cypher(
+
+) where
+
 isUpperCase :: Char -> Bool
-isUpperCase c = c `elem` ['A', 'B'..'Z']
+isUpperCase = flip elem ['A', 'B'..'Z']
 
 isLowerCase :: Char -> Bool
-isLowerCase c = c `elem` ['a', 'b'..'z']
+isLowerCase = flip elem ['a', 'b'..'z']
 
 isPunctuation :: Char -> Bool 
-isPunctuation c = c `elem` [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
+isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
 
 pos :: Char -> [Char] -> Int
 pos = posImp 0
