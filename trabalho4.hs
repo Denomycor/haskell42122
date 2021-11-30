@@ -3,15 +3,15 @@
 --                | crypt == "dec" = 
 
 sub :: String -> String
-sub str = drop (- (length str)) (as ++ str ++ bs)
-    where (as, bs) = splitAt 0 [ x | x <- ['a' .. 'z'], x `notElem` str]
+sub str = drop (- (length str)) (as ++ unique str ++ bs)
+    where (as, bs) = splitAt 0 [ x | x <- ['a' .. 'z'], x `notElem` (unique str)]
 
 cesar :: Int -> String
 cesar x = bs ++ as
     where (as, bs) = splitAt x ['a' .. 'z']
 
-perm :: String -> String
-perm str = [x | x <- ]
+unique :: String -> String
+unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs]
 
-    --ccrypt :: String -> Int -> String
+--ccrypt :: String -> Int -> String
 --ccrypt 
