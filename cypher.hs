@@ -1,6 +1,6 @@
 
 module Cypher(
-
+    cesar,
 ) where
 
 isUpperCase :: Char -> Bool
