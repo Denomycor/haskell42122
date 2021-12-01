@@ -1,6 +1,6 @@
 
 module Cypher(
-
+    vigenere,
 ) where
 
 isUpperCase :: Char -> Bool
