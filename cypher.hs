@@ -24,7 +24,7 @@ unique :: [Char] -> [Char]
 unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, not (isPunctuation x)]
 
 substitute :: [Char] -> Char -> [Char] -> Char
-substitute abc1 x abc2 | isUpperCase x = toUpper abc1!!pos x (toUpper abc2)
+substitute abc1 char abc2 | isUpperCase x = toUpper abc1!!pos x (toUpper abc2)
                        | isLowerCase x = abc1!!pos x abc2
                        | otherwise = x
 
