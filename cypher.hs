@@ -1,6 +1,7 @@
 
 module Cypher(
     vigenere,
+    cesar,
 ) where
 
 isUpperCase :: Char -> Bool
@@ -34,6 +35,10 @@ zipKey _ [] = []
 zipKey (a1:a) (b1:b) 
     | isPunctuation a1 = (a1, 0) : zipKey a (b1:b)
     | otherwise = (a1, b1) : zipKey a b
+
+cesar :: [Char] -> Int -> Bool -> [Char]
+cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
+    where key = repeat $ if op then k else k*(-1)
 
 vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
