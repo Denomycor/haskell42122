@@ -13,8 +13,23 @@ isLowerCase = flip elem ['a'..'z']
 isPunctuation :: Char -> Bool 
 isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
 
-toUpper :: Char -> Char
-toUpper ch = toEnum (fromEnum ch + (fromEnum 'A' - fromEnum 'a'))
+toUpper :: [Char] -> [Char]
+toUpper ch = [toEnum $ fromEnum x + (fromEnum 'A' - fromEnum 'a') | x <- ch]
+
+sub :: [Char] -> [Char]
+sub str = drop (-(length (unique str))) (unique str ++ [ x | x <- ['a'..'z'], x `notElem` unique str])
+
+unique :: [Char] -> [Char]
+unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, not (isPunctuation x)]
+
+substite :: [Char] -> Char -> Char
+substite abc x | isUpperCase x = toUpper abc!!pos x ['A'..'Z']
+               | isLowerCase x = abc!!pos x ['a'..'z']
+               | otherwise = x
+                       
+subs :: [Char] -> [Char] -> Bool -> [Char]
+subs str sms op = [substite (sub key) x | x <- sms]
+             where key = if op then str else ""
 
 posImp :: Int -> Char -> [Char] -> Int
 posImp _ _ [] = -1
@@ -27,21 +42,19 @@ shift :: Char -> [Char] -> Int -> Char
 shift c a n = head $ drop ((pos c a + n) `mod` length a) a
 
 shiftAlpha :: Char -> Int -> Char 
-shiftAlpha c n 
-    | isUpperCase c = shift c ['A'..'Z'] n
-    | isLowerCase c = shift c ['a'..'z'] n
-    | otherwise = c
-
+shiftAlpha c n | isUpperCase c = shift c ['A'..'Z'] n
+               | isLowerCase c = shift c ['a'..'z'] n
+               | otherwise = c
+               
 zipKey :: [Char] -> [Int] -> [(Char,Int)]
 zipKey [] _ = []
 zipKey _ [] = []
-zipKey (a1:a) (b1:b) 
-    | isPunctuation a1 = (a1, 0) : zipKey a (b1:b)
-    | otherwise = (a1, b1) : zipKey a b
+zipKey (a1:a) (b1:b) | isPunctuation a1 = (a1, 0) : zipKey a (b1:b)
+                     | otherwise = (a1, b1) : zipKey a b
 
 cesar :: [Char] -> Int -> Bool -> [Char]
 cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
-    where key = repeat $ if op then k else k*(-1)
+    where key = repeat $ if op then k else k * (-1)
 
 vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
