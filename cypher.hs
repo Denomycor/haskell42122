@@ -1,5 +1,6 @@
 
 module Cypher(
+    vigenere,
     cesar,
 ) where
 
@@ -38,3 +39,7 @@ zipKey (a1:a) (b1:b)
 cesar :: [Char] -> Int -> Bool -> [Char]
 cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
     where key = repeat $ if op then k else k*(-1)
+
+vigenere :: [Char] -> [Char] -> Bool -> [Char]
+vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
+    where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
