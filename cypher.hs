@@ -13,6 +13,9 @@ isLowerCase = flip elem ['a'..'z']
 isPunctuation :: Char -> Bool 
 isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
 
+toUpper :: Char -> Char
+toUpper ch = toEnum (fromEnum ch + (fromEnum 'A' - fromEnum 'a'))
+
 posImp :: Int -> Char -> [Char] -> Int
 posImp _ _ [] = -1
 posImp i c (a1:a) = if c == a1 then i else posImp (i+1) c a
