@@ -2,6 +2,7 @@
 module Cypher(
     vigenere,
     cesar,
+    subs,
 ) where
 
 isUpperCase :: Char -> Bool
@@ -22,14 +23,10 @@ sub str = drop (-(length (unique str))) (unique str ++ [ x | x <- ['a'..'z'], x 
 unique :: [Char] -> [Char]
 unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, not (isPunctuation x)]
 
-substite :: [Char] -> Char -> Char
-substite abc x | isUpperCase x = toUpper abc!!pos x ['A'..'Z']
-               | isLowerCase x = abc!!pos x ['a'..'z']
-               | otherwise = x
-                       
-subs :: [Char] -> [Char] -> Bool -> [Char]
-subs str sms op = [substite (sub key) x | x <- sms]
-             where key = if op then str else ""
+substitute :: [Char] -> Char -> [Char] -> Char
+substitute abc1 x abc2 | isUpperCase x = toUpper abc1!!pos x (toUpper abc2)
+                       | isLowerCase x = abc1!!pos x abc2
+                       | otherwise = x
 
 posImp :: Int -> Char -> [Char] -> Int
 posImp _ _ [] = -1
@@ -55,6 +52,11 @@ zipKey (a1:a) (b1:b) | isPunctuation a1 = (a1, 0) : zipKey a (b1:b)
 cesar :: [Char] -> Int -> Bool -> [Char]
 cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
     where key = repeat $ if op then k else k * (-1)
+
+subs :: [Char] -> [Char] -> Bool -> [Char]
+subs str sms op = [substitute key x abc | x <- sms]
+            where key = if op then sub str else ['a'..'z']
+                  abc = if op then ['a'..'z'] else sub str
 
 vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
