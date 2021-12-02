@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
---Suppress incomplete-patterns because evalArgs ensures that the list has 3 elements 
 
 module EvalArgs(
     evalArgs
@@ -9,10 +7,8 @@ import Text.Read (readMaybe)
 import Data.Maybe (isJust)
 
 evalArgs :: [String] -> Bool
-evalArgs a = (length a == 3) && evalArgsImp a
-
-evalArgsImp :: [String] -> Bool
-evalArgsImp [c,d,k] = evalDirection d && evalCypherKey c k
+evalArgs [c,d,k] = evalDirection d && evalCypherKey c k
+evalArgs _ = False
 
 evalDirection :: String -> Bool
 evalDirection d = d == "enc" || d == "dec"

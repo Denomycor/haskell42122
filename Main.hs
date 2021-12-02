@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
---Suppress incomplete-patterns because evalArgs already checks for the correct format of the list and its members
 
 module Main where
 
@@ -26,3 +24,4 @@ cypher [c,d,k] t
     | c == "vigenere" = vigenere t k (d=="enc")
     | c == "substitui" = subs t k (d=="enc")
     | otherwise = "Error"
+cypher _ _ = "Error"
