@@ -1,17 +1,24 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+--Suppress incomplete-patterns because evalArgs already checks for the correct format of the list and its members
 
 module Main where
 
-import System.Environment ( getArgs )
-import Cypher ( cesar, subs, vigenere )
-import Control.Monad ( when )
+import System.Environment (getArgs)
+import Control.Monad (when)
+import Cypher (cesar, subs, vigenere)
+import EvalArgs (evalArgs)
 
 main = do
     args <-getArgs
+    if evalArgs args then
+        loop args
+    else
+        putStrLn "Error - Input in wrong format!\nPlese try: Main {name of cypher} {enc or dec} {key for given cyper}"
+
+loop args = do
     text <- getLine
     putStrLn $ cypher args text
-    when (not $ null text) main
-
+    when (not $ null text) (loop args)
 
 cypher :: [String] -> String -> String
 cypher [c,d,k] t

@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+--Suppress incomplete-patterns because evalArgs ensures that the list has 3 elements 
 
 module EvalArgs(
     evalArgs
