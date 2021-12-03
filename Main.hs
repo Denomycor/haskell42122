@@ -18,8 +18,10 @@ loop args = do
     putStrLn $ cypher args text
     when (not $ null text) (loop args)
 
+
 cypher :: [String] -> String -> String
 cypher [c,d,k] t
+    | d /= "enc" && d /= "dec" = "Error"
     | c == "cesar" = cesar t (read k) (d=="enc")
     | c == "vigenere" = vigenere t k (d=="enc")
     | c == "substitui" = subs t k (d=="enc")
