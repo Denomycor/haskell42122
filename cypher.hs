@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
 module Cypher(
     vigenere,
@@ -14,19 +15,23 @@ isLowerCase = flip elem ['a'..'z']
 isPunctuation :: Char -> Bool 
 isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
 
-toUpper :: [Char] -> [Char]
-toUpper ch = [toEnum $ fromEnum x + (fromEnum 'A' - fromEnum 'a') | x <- ch]
+toUpperString :: [Char] -> [Char]
+toUpperString str = [toEnum $ fromEnum x + (fromEnum 'A' - fromEnum 'a') | x <- str]
+
+toLowerChar :: Char -> Char
+toLowerChar ch | isUpperCase ch = toEnum $ fromEnum ch - (fromEnum 'A' - fromEnum 'a')
+               | otherwise = ch
 
 sub :: [Char] -> [Char]
-sub str = drop (-(length (unique str))) (unique str ++ [ x | x <- ['a'..'z'], x `notElem` unique str])
+sub str = unique [toLowerChar x | x <- str ++ ['a'..'z']]
 
 unique :: [Char] -> [Char]
 unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, not (isPunctuation x)]
 
 substitute :: [Char] -> Char -> [Char] -> Char
-substitute abc1 char abc2 | isUpperCase char = toUpper abc1!!pos char (toUpper abc2)
-                       | isLowerCase char = abc1!!pos char abc2
-                       | otherwise = char
+substitute abc1 char abc2 | isUpperCase char = toUpperString abc1!!pos char (toUpperString abc2)
+                          | isLowerCase char = abc1!!pos char abc2
+                          | otherwise = char
 
 posImp :: Int -> Char -> [Char] -> Int
 posImp _ _ [] = -1
@@ -55,8 +60,8 @@ cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
 
 subs :: [Char] -> [Char] -> Bool -> [Char]
 subs str sms op = [substitute key x abc | x <- sms]
-            where key = if op then sub str else ['a'..'z']
-                  abc = if op then ['a'..'z'] else sub str
+           where key = if op then sub str else ['a'..'z']
+                 abc = if op then ['a'..'z'] else sub str
 
 vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
