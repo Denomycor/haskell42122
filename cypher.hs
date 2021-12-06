@@ -59,7 +59,7 @@ cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
     where key = repeat $ if op then k else k * (-1)
 
 subs :: [Char] -> [Char] -> Bool -> [Char]
-subs str sms op = [substitute key x abc | x <- sms]
+subs sms str op = [substitute key x abc | x <- sms]
            where key = if op then sub str else ['a'..'z']
                  abc = if op then ['a'..'z'] else sub str
 
