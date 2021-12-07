@@ -25,3 +25,8 @@ cypher [c,d,k] t
     | c == "substitui" = substitute t k (d=="enc")
     | otherwise = "Error"
 cypher _ _ = "Error"
+
+--Salvador Sobral, Amar pelos Dois
+--LITUANIA
+--8
+--PAISEURO
