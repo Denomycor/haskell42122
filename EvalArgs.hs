@@ -15,4 +15,4 @@ evalDirection d = d == "enc" || d == "dec"
 
 evalCypherKey :: String -> String -> Bool
 evalCypherKey c k = (isJust (readMaybe k :: Maybe Int) && c=="cesar") || 
-    (foldl (\acc x -> acc && x `elem` ['A'..'Z']) True k && (c=="vigenere" || c=="substituir"))
+    (foldl (\acc x -> acc && x `elem` ['A'..'Z']) True k && (c=="vigenere" || c=="substitui"))
