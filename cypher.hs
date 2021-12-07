@@ -65,3 +65,5 @@ substitute sms str op = [subChar key x abc | x <- sms]
 vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
     where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
+
+    Enqp kpmqe sp gehnpreg tnp tgp ibump se ntanqbqtbipj. P iopve senqp kpmqe sp tgp kbnqp njame p iopve tqbfbzpsp hp kmbgebmp kpmqe.
