@@ -1,8 +1,8 @@
 
 module Cypher(
     vigenere,
+    substitute,
     cesar,
-    subs,
 ) where
 
 isUpperCase :: Char -> Bool
@@ -21,16 +21,16 @@ toLowerChar :: Char -> Char
 toLowerChar ch | isUpperCase ch = toEnum $ fromEnum ch - (fromEnum 'A' - fromEnum 'a')
                | otherwise = ch
 
-sub :: [Char] -> [Char]
-sub str = unique [toLowerChar x | x <- str ++ ['a'..'z']]
+abcSub :: [Char] -> [Char]
+abcSub str = unique [toLowerChar x | x <- str ++ ['a'..'z']]
 
 unique :: [Char] -> [Char]
 unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, not (isPunctuation x)]
 
-substitute :: [Char] -> Char -> [Char] -> Char
-substitute abc1 char abc2 | isUpperCase char = toUpperString abc1!!pos char (toUpperString abc2)
-                          | isLowerCase char = abc1!!pos char abc2
-                          | otherwise = char
+subChar :: [Char] -> Char -> [Char] -> Char
+subChar abc1 char abc2 | isUpperCase char = toUpperString abc1!!pos char (toUpperString abc2)
+                       | isLowerCase char = abc1!!pos char abc2
+                       | otherwise = char
 
 posImp :: Int -> Char -> [Char] -> Int
 posImp _ _ [] = -1
@@ -57,10 +57,10 @@ cesar :: [Char] -> Int -> Bool -> [Char]
 cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
     where key = repeat $ if op then k else k * (-1)
 
-subs :: [Char] -> [Char] -> Bool -> [Char]
-subs sms str op = [substitute key x abc | x <- sms]
-           where key = if op then sub str else ['a'..'z']
-                 abc = if op then ['a'..'z'] else sub str
+substitute :: [Char] -> [Char] -> Bool -> [Char]
+substitute sms str op = [subChar key x abc | x <- sms]
+           where key = if op then abcSub str else ['a'..'z']
+                 abc = if op then ['a'..'z'] else abcSub str
 
 vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]

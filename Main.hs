@@ -3,7 +3,7 @@ module Main where
 
 import System.Environment (getArgs)
 import Control.Monad (when)
-import Cypher (cesar, subs, vigenere)
+import Cypher(vigenere, substitute, cesar)
 import EvalArgs (evalArgs)
 
 main = do
@@ -22,6 +22,6 @@ cypher :: [String] -> String -> String
 cypher [c,d,k] t
     | c == "cesar" = cesar t (read k) (d=="enc")
     | c == "vigenere" = vigenere t k (d=="enc")
-    | c == "substitui" = subs t k (d=="enc")
+    | c == "substitui" = substitute t k (d=="enc")
     | otherwise = "Error"
 cypher _ _ = "Error"
