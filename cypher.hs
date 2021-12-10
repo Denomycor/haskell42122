@@ -5,31 +5,20 @@ module Cypher(
     cesar,
 ) where
 
-isUpperCase :: Char -> Bool
-isUpperCase = flip elem ['A'..'Z']
-
-isLowerCase :: Char -> Bool
-isLowerCase = flip elem ['a'..'z']
-
-isPunctuation :: Char -> Bool 
-isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
+import Data.Char
 
 toUpperString :: [Char] -> [Char]
-toUpperString str = [toEnum $ fromEnum x + (fromEnum 'A' - fromEnum 'a') | x <- str]
-
-toLowerChar :: Char -> Char
-toLowerChar ch | isUpperCase ch = toEnum $ fromEnum ch - (fromEnum 'A' - fromEnum 'a')
-               | otherwise = ch
+toUpperString str = [toUpper x| x <- str]
 
 abcSub :: [Char] -> [Char]
-abcSub str = unique [toLowerChar x | x <- str ++ ['a'..'z']]
+abcSub str = unique [toLower x | x <- str ++ ['a'..'z']]
 
 unique :: [Char] -> [Char]
-unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, not (isPunctuation x)]
+unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, isLetter x]
 
 subChar :: [Char] -> Char -> [Char] -> Char
-subChar abc1 char abc2 | isUpperCase char = toUpperString abc1!!pos char (toUpperString abc2)
-                       | isLowerCase char = abc1!!pos char abc2
+subChar abc1 char abc2 | isUpper char = toUpperString abc1!!pos char (toUpperString abc2)
+                       | isLower char = abc1!!pos char abc2
                        | otherwise = char
 
 posImp :: Int -> Char -> [Char] -> Int
@@ -43,8 +32,8 @@ shift :: Char -> [Char] -> Int -> Char
 shift c a n = head $ drop ((pos c a + n) `mod` length a) a
 
 shiftAlpha :: Char -> Int -> Char 
-shiftAlpha c n | isUpperCase c = shift c ['A'..'Z'] n
-               | isLowerCase c = shift c ['a'..'z'] n
+shiftAlpha c n | isUpper c = shift c ['A'..'Z'] n
+               | isLower c = shift c ['a'..'z'] n
                | otherwise = c
                
 zipKey :: [Char] -> [Int] -> [(Char,Int)]
@@ -66,4 +55,4 @@ vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
     where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
 
-    Enqp kpmqe sp gehnpreg tnp tgp ibump se ntanqbqtbipj. P iopve senqp kpmqe sp tgp kbnqp njame p iopve tqbfbzpsp hp kmbgebmp kpmqe.
+
