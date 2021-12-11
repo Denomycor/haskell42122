@@ -7,9 +7,6 @@ module Cypher(
 
 import Data.Char
 
-toUpperString :: [Char] -> [Char]
-toUpperString str = [toUpper x| x <- str]
-
 abcSub :: [Char] -> [Char]
 abcSub str = unique [toLower x | x <- str ++ ['a'..'z']]
 
@@ -17,7 +14,7 @@ unique :: [Char] -> [Char]
 unique xs = [x | (x,y) <- zip xs [0..], x `notElem` take y xs, isLetter x]
 
 subChar :: [Char] -> Char -> [Char] -> Char
-subChar abc1 char abc2 | isUpper char = toUpperString abc1!!pos char (toUpperString abc2)
+subChar abc1 char abc2 | isUpper char = toUpper $ abc1!!pos (toLower char) abc2
                        | isLower char = abc1!!pos char abc2
                        | otherwise = char
 
