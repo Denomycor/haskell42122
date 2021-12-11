@@ -4,6 +4,7 @@ module Cypher(
     substitute,
     cesar,
 ) where
+
 import Data.Char(toUpper, toLower, isLetter, isLower, isUpper)
 
 isPunctuation :: Char -> Bool 
