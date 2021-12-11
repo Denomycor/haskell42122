@@ -3,6 +3,8 @@ import Cypher(vigenere, substitute, cesar)
 
 newtype MensagemValida = MensagemValida String
 
+
+
 cesarDoubleEnc :: String -> Int -> Int -> Bool
 cesarDoubleEnc msm m n = cesar (cesar msm m True) n True == cesar msm (m+n) True
 
@@ -14,6 +16,10 @@ subCheck msm key = substitute (substitute msm key True) key False == msm
 
 vigenereCheck :: String -> String -> Bool
 vigenereCheck msm key = vigenere (vigenere msm key True) key False == msm
+
+cesarFullRotation :: String -> Bool
+cesarFullRotation msm = cesar msm 26 True && cesar msm 26 False == msm
+
 
 
 
