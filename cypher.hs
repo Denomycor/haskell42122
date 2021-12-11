@@ -4,7 +4,6 @@ module Cypher(
     substitute,
     cesar,
 ) where
-
 import Data.Char(toUpper, toLower, isLetter, isLower, isUpper)
 
 isPunctuation :: Char -> Bool 
@@ -45,11 +44,11 @@ zipKey (a1:a) (b1:b) | isPunctuation a1 = (a1, 0) : zipKey a (b1:b)
 cesar :: [Char] -> Int -> Bool -> [Char]
 cesar m k op = [shiftAlpha c $ if op then k else k * (-1) | c <- m]
 
+vigenere :: [Char] -> [Char] -> Bool -> [Char]
+vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
+    where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
+
 substitute :: [Char] -> [Char] -> Bool -> [Char]
 substitute sms str op = [subChar key x abc | x <- sms]
            where key = if op then abcSub str else ['a'..'z']
                  abc = if op then ['a'..'z'] else abcSub str
-
-vigenere :: [Char] -> [Char] -> Bool -> [Char]
-vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
-    where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
