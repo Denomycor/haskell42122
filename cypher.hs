@@ -5,7 +5,10 @@ module Cypher(
     cesar,
 ) where
 
-import Data.Char
+import Data.Char(toUpper, toLower, isLetter, isLower, isUpper)
+
+isPunctuation :: Char -> Bool 
+isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
 
 abcSub :: [Char] -> [Char]
 abcSub str = unique [toLower x | x <- str ++ ['a'..'z']]
