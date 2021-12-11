@@ -43,8 +43,7 @@ zipKey (a1:a) (b1:b) | isPunctuation a1 = (a1, 0) : zipKey a (b1:b)
                      | otherwise = (a1, b1) : zipKey a b
 
 cesar :: [Char] -> Int -> Bool -> [Char]
-cesar m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
-    where key = repeat $ if op then k else k * (-1)
+cesar m k op = [shiftAlpha c $ if op then k else k * (-1) | c <- m]
 
 substitute :: [Char] -> [Char] -> Bool -> [Char]
 substitute sms str op = [subChar key x abc | x <- sms]
@@ -54,5 +53,3 @@ substitute sms str op = [subChar key x abc | x <- sms]
 vigenere :: [Char] -> [Char] -> Bool -> [Char]
 vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
     where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
-
-
