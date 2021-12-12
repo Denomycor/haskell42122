@@ -9,32 +9,46 @@ module QuickTests(
 import Test.QuickCheck
 import Cypher(vigenere, substitute, cesar)
 
-
-newtype CharList = CharList String deriving (Eq, Show)
-
-
-vowel :: Gen Char
-vowel = elements (['a'..'z'] ++ ['A'..'Z'] ++ [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')'])
+newtype MsmValid = MsmValid [Char]
+newtype KeyValid = KeyValid [Char]
 
 
+genMsmValid :: Gen MsmValid
+genMsmValid =  do MsmValid <$> listOf1 (elements (['a'..'z'] ++ ['A'..'Z'] ++ [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']))
+
+genKeyValid :: Gen KeyValid
+genKeyValid = do KeyValid <$> listOf1 (elements ['A'..'Z'])
 
 
 
-
-cesarDoubleEnc :: CharList -> Int -> Int -> Bool
+cesarDoubleEnc :: MsmValid -> Int -> Int -> Bool
 cesarDoubleEnc msm m n = cesar (cesar (show msm) m True) n True == cesar (show msm) (m+n) True
 
-cesarCheck :: String -> Int -> Bool
-cesarCheck msm key = cesar (cesar msm key True) key False == msm
+cesarCheck :: MsmValid -> Int -> Bool
+cesarCheck msm key = cesar (cesar (show msm) key True) key False == show msm
 
-subCheck :: String -> String -> Bool
-subCheck msm key = substitute (substitute msm key True) key False == msm  
+subCheck :: MsmValid -> KeyValid -> Bool
+subCheck msm key = substitute (substitute (show msm) (show key) True) (show key) False == show msm
 
-vigenereCheck :: String -> String -> Bool
-vigenereCheck msm key = vigenere (vigenere msm key True) key False == msm
+vigenereCheck :: MsmValid -> KeyValid -> Bool
+vigenereCheck msm key = vigenere (vigenere (show msm) (show key) True) (show key) False == show msm
 
-cesarFullRotation :: String -> Bool
-cesarFullRotation msm = cesar msm 26 True == msm && cesar msm 26 False == msm 
+cesarFullRotation :: MsmValid -> Bool
+cesarFullRotation msm = cesar (show msm) 26 True == show msm && cesar (show msm) 26 False == show msm
+
+
+
+instance Arbitrary MsmValid where
+    arbitrary = genMsmValid
+
+instance Arbitrary KeyValid where
+    arbitrary = genKeyValid
+
+instance Show MsmValid where
+    show (MsmValid x) = show x
+
+instance Show KeyValid where
+    show (KeyValid x) = show x
 
 
 
