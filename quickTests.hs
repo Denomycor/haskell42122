@@ -4,7 +4,7 @@ module QuickTests(
     subCheck,
     vigenereCheck,
     cesarFullRotation,
-    --vigenereRotation,
+    --5vigenereRotation,
 ) where
 
 import Test.QuickCheck
@@ -13,9 +13,11 @@ import Cypher(vigenere, substitute, cesar)
 newtype MsmValid = MsmValid [Char]
 newtype KeyValid = KeyValid [Char]
 
+letters :: [Char]
+letters = ['a'..'z'] ++ ['A'..'Z'] ++ [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
 
 genMsmValid :: Gen MsmValid
-genMsmValid =  do MsmValid <$> listOf1 (elements (['a'..'z'] ++ ['A'..'Z'] ++ [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']))
+genMsmValid =  do MsmValid <$> listOf1 (elements letters)
 
 genKeyValid :: Gen KeyValid
 genKeyValid = do KeyValid <$> listOf1 (elements ['A'..'Z'])
@@ -42,8 +44,6 @@ cesarFullRotation :: MsmValid -> Bool
 cesarFullRotation msm = cesar (show msm) 26 True == show msm && cesar (show msm) 26 False == show msm
 
 
-vigenereRotation :: MsmValid -> Bool
-vigenereRotation msm = vigenere (show msm) elements [] True == (show msm)
 
 
 
