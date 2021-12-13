@@ -14,7 +14,7 @@ main = do
     else if args == ["-t"] then
         runAllTests   
     else
-        putStrLn "Error - Input in wrong format!\nPlese try: Main {name of cypher} {enc or dec} {key for given cyper}"
+        putStrLn "Error - Input in wrong format!\nPlese try: Main {name of cypher} {enc or dec} {key for given cyper} or Main -t"
 
 
 loop :: [String] -> IO ()
