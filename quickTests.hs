@@ -2,11 +2,11 @@ module QuickTests(
     runAllTests
 ) where
 import Test.QuickCheck
-import Cypher(vigenere, substitute, cesar)
+import Cypher(vigenere, substitute, cesar, abcSub, isPunctuation)
+import Data.List (sort)
 
 newtype MsgValid = MsgValid [Char]
 newtype KeyValid = KeyValid [Char]
---newtype CharValid = CharValid Char
 
 letters :: [Char]
 letters = ['a'..'z'] ++ ['A'..'Z'] ++ " ,;.?!:-()"
@@ -16,9 +16,6 @@ genMsgValid =  do MsgValid <$> listOf1 (elements letters)
 
 genKeyValid :: Gen KeyValid
 genKeyValid = do KeyValid <$> listOf1 (elements ['A'..'Z'])
-
---genCharValid :: Gen CharValid
---genCharValid = elements letters
 
 --Check: cesar (cesar m) n == cesar m+n
 cesarDoubleEnc :: MsgValid -> Int -> Int -> Bool
@@ -40,8 +37,22 @@ vigenereCheck msg key = vigenere (vigenere (show msg) (show key) True) (show key
 cesarFullRotation :: MsgValid -> Bool
 cesarFullRotation msg = cesar (show msg) 26 True == show msg && cesar (show msg) 26 False == show msg
 
---checkSpacesVigenere :: CharValid -> KeyValid -> Bool
---checkSpacesVigenere = 
+--Check is the permutation on the key in the substitute is a true permutation
+subsPermutation :: KeyValid -> Bool
+subsPermutation key = sort (abcSub (show key)) == ['a'..'z']
+
+--Check if the vingere skips over the spaces when applying the key
+vingereCharSkip :: MsgValid -> KeyValid -> Bool
+vingereCharSkip msg key = remove (vigenere (" " ++ show msg ++ " ") (show key) True) == remove (vigenere (show msg) (show key) True)
+
+
+remove :: [Char] -> [Char]
+remove = filter (not . isPunctuation)
+
+
+
+
+
 
 runAllTests :: IO ()
 runAllTests = do
@@ -50,16 +61,14 @@ runAllTests = do
     quickCheck subCheck
     quickCheck vigenereCheck
     quickCheck cesarFullRotation
-    --quickCheck vigenereRotation
+    quickCheck subsPermutation
+    quickCheck vingereCharSkip
 
 instance Arbitrary MsgValid where
     arbitrary = genMsgValid
 
 instance Arbitrary KeyValid where
     arbitrary = genKeyValid
-
---instance Arbitrary CharValid where
--- arbitrary = genCharValid
 
 instance Show MsgValid where
     show (MsgValid x) = show x

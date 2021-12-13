@@ -2,6 +2,8 @@ module Cypher(
     vigenere,
     substitute,
     cesar,
+    abcSub,
+    isPunctuation,
 ) where
 
 import Data.Char(toUpper, toLower, isLetter, isLower, isUpper)
