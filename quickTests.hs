@@ -44,9 +44,6 @@ cesarFullRotation :: MsmValid -> Bool
 cesarFullRotation msm = cesar (show msm) 26 True == show msm && cesar (show msm) 26 False == show msm
 
 
-
-
-
 instance Arbitrary MsmValid where
     arbitrary = genMsmValid
 
@@ -58,7 +55,3 @@ instance Show MsmValid where
 
 instance Show KeyValid where
     show (KeyValid x) = show x
-
-
-
-
