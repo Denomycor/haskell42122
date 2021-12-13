@@ -14,6 +14,3 @@ subCheck msm key = substitute (substitute msm key True) key False == msm
 
 vigenereCheck :: String -> String -> Bool
 vigenereCheck msm key = vigenere (vigenere msm key True) key False == msm
-
-
-

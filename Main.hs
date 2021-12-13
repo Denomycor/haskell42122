@@ -31,4 +31,4 @@ cypher _ _ = "Error"
 --Salvador Sobral, Amar pelos Dois
 --LITUANIA
 --8
---PAISEURO
+--PAISEUROPA
