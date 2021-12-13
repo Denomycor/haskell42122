@@ -44,7 +44,7 @@ cesar :: [Char] -> Int -> Bool -> [Char]
 cesar m k op = [shiftAlpha c $ if op then k else k * (-1) | c <- m] 
 
 substitute :: [Char] -> [Char] -> Bool -> [Char]
-substitute sms str op = [subChar key x abc | x <- sms]
+substitute msg str op = [subChar key x abc | x <- msg]
            where key = if op then abcSub str else ['a'..'z']
                  abc = if op then ['a'..'z'] else abcSub str
 

@@ -1,57 +1,59 @@
 module QuickTests(
-    cesarDoubleEnc,
-    cesarCheck,
-    subCheck,
-    vigenereCheck,
-    cesarFullRotation,
-    --5vigenereRotation,
+    runAllTests
 ) where
-
 import Test.QuickCheck
 import Cypher(vigenere, substitute, cesar)
 
-newtype MsmValid = MsmValid [Char]
+newtype MsgValid = MsgValid [Char]
 newtype KeyValid = KeyValid [Char]
 
 letters :: [Char]
-letters = ['a'..'z'] ++ ['A'..'Z'] ++ [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
+letters = ['a'..'z'] ++ ['A'..'Z'] ++ " ,;.?!:-()"
 
-genMsmValid :: Gen MsmValid
-genMsmValid =  do MsmValid <$> listOf1 (elements letters)
+genMsgValid :: Gen MsgValid
+genMsgValid =  do MsgValid <$> listOf1 (elements letters)
 
 genKeyValid :: Gen KeyValid
 genKeyValid = do KeyValid <$> listOf1 (elements ['A'..'Z'])
 
 
 --Check: cesar (cesar m) n == cesar m+n
-cesarDoubleEnc :: MsmValid -> Int -> Int -> Bool
-cesarDoubleEnc msm m n = cesar (cesar (show msm) m True) n True == cesar (show msm) (m+n) True
+cesarDoubleEnc :: MsgValid -> Int -> Int -> Bool
+cesarDoubleEnc msg m n = cesar (cesar (show msg) m True) n True == cesar (show msg) (m+n) True
 
 --Check Enc & Dec
-cesarCheck :: MsmValid -> Int -> Bool
-cesarCheck msm key = cesar (cesar (show msm) key True) key False == show msm
+cesarCheck :: MsgValid -> Int -> Bool
+cesarCheck msg key = cesar (cesar (show msg) key True) key False == show msg
 
 --Check Enc & Dec
-subCheck :: MsmValid -> KeyValid -> Bool
-subCheck msm key = substitute (substitute (show msm) (show key) True) (show key) False == show msm
+subCheck :: MsgValid -> KeyValid -> Bool
+subCheck msg key = substitute (substitute (show msg) (show key) True) (show key) False == show msg
 
 --Check Enc & Dec
-vigenereCheck :: MsmValid -> KeyValid -> Bool
-vigenereCheck msm key = vigenere (vigenere (show msm) (show key) True) (show key) False == show msm
+vigenereCheck :: MsgValid -> KeyValid -> Bool
+vigenereCheck msg key = vigenere (vigenere (show msg) (show key) True) (show key) False == show msg
 
---Check if a full rotaion of cesar returns it to the inicial msm
-cesarFullRotation :: MsmValid -> Bool
-cesarFullRotation msm = cesar (show msm) 26 True == show msm && cesar (show msm) 26 False == show msm
+--Check if a full rotaion of cesar returns it to the inicial msg
+cesarFullRotation :: MsgValid -> Bool
+cesarFullRotation msg = cesar (show msg) 26 True == show msg && cesar (show msg) 26 False == show msg
 
+runAllTests :: IO ()
+runAllTests = do
+    quickCheck cesarDoubleEnc
+    quickCheck cesarCheck
+    quickCheck subCheck
+    quickCheck vigenereCheck
+    quickCheck cesarFullRotation
+    --quickCheck vigenereRotation
 
-instance Arbitrary MsmValid where
-    arbitrary = genMsmValid
+instance Arbitrary MsgValid where
+    arbitrary = genMsgValid
 
 instance Arbitrary KeyValid where
     arbitrary = genKeyValid
 
-instance Show MsmValid where
-    show (MsmValid x) = show x
+instance Show MsgValid where
+    show (MsgValid x) = show x
 
 instance Show KeyValid where
     show (KeyValid x) = show x
