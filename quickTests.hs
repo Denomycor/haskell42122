@@ -6,6 +6,7 @@ import Cypher(vigenere, substitute, cesar)
 
 newtype MsgValid = MsgValid [Char]
 newtype KeyValid = KeyValid [Char]
+--newtype CharValid = CharValid Char
 
 letters :: [Char]
 letters = ['a'..'z'] ++ ['A'..'Z'] ++ " ,;.?!:-()"
@@ -16,6 +17,8 @@ genMsgValid =  do MsgValid <$> listOf1 (elements letters)
 genKeyValid :: Gen KeyValid
 genKeyValid = do KeyValid <$> listOf1 (elements ['A'..'Z'])
 
+--genCharValid :: Gen CharValid
+--genCharValid = elements letters
 
 --Check: cesar (cesar m) n == cesar m+n
 cesarDoubleEnc :: MsgValid -> Int -> Int -> Bool
@@ -37,6 +40,9 @@ vigenereCheck msg key = vigenere (vigenere (show msg) (show key) True) (show key
 cesarFullRotation :: MsgValid -> Bool
 cesarFullRotation msg = cesar (show msg) 26 True == show msg && cesar (show msg) 26 False == show msg
 
+--checkSpacesVigenere :: CharValid -> KeyValid -> Bool
+--checkSpacesVigenere = 
+
 runAllTests :: IO ()
 runAllTests = do
     quickCheck cesarDoubleEnc
@@ -51,6 +57,9 @@ instance Arbitrary MsgValid where
 
 instance Arbitrary KeyValid where
     arbitrary = genKeyValid
+
+--instance Arbitrary CharValid where
+-- arbitrary = genCharValid
 
 instance Show MsgValid where
     show (MsgValid x) = show x
