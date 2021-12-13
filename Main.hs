@@ -1,34 +1,29 @@
-
 module Main where
 
 import System.Environment (getArgs)
 import Control.Monad (when)
 import Cypher(vigenere, substitute, cesar)
-import QuickTests(cesarDoubleEnc, cesarCheck, subCheck, vigenereCheck, cesarFullRotation,)-- vigenereRotation)
 import EvalArgs (evalArgs)
-import Test.QuickCheck
+import QuickTests (runAllTests)
 
+main :: IO ()
 main = do
     args <-getArgs
     if evalArgs args then
         loop args
     else if args == ["-t"] then
-        quicktests
+        runAllTests   
     else
         putStrLn "Error - Input in wrong format!\nPlese try: Main {name of cypher} {enc or dec} {key for given cyper}"
 
+
+loop :: [String] -> IO ()
 loop args = do
     text <- getLine
     putStrLn $ cypher args text
     when (not $ null text) (loop args)
 
-quicktests = do
-    quickCheck cesarDoubleEnc
-    quickCheck cesarCheck
-    quickCheck subCheck
-    quickCheck vigenereCheck
-    quickCheck cesarFullRotation
-    --quickCheck vigenereRotation
+
 
 cypher :: [String] -> String -> String
 cypher [c,d,k] t
@@ -41,4 +36,4 @@ cypher _ _ = "Error"
 --Salvador Sobral, Amar pelos Dois
 --LITUANIA
 --8
---PAISEURO
+--PAISEUROPA
