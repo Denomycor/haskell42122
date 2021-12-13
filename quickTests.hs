@@ -49,11 +49,6 @@ vingereCharSkip msg key = remove (vigenere (" " ++ show msg ++ " ") (show key) T
 remove :: [Char] -> [Char]
 remove = filter (not . isPunctuation)
 
-
-
-
-
-
 runAllTests :: IO ()
 runAllTests = do
     quickCheck cesarDoubleEnc
