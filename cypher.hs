@@ -1,4 +1,3 @@
-
 module Cypher(
     vigenere,
     substitute,
@@ -8,7 +7,7 @@ module Cypher(
 import Data.Char(toUpper, toLower, isLetter, isLower, isUpper)
 
 isPunctuation :: Char -> Bool 
-isPunctuation = flip elem [' ', ',', ';', '.', '?', '!', ':', '-', '(', ')']
+isPunctuation = flip elem " ,;.?!:-()"
 
 abcSub :: [Char] -> [Char]
 abcSub str = unique [toLower x | x <- str ++ ['a'..'z']]
@@ -21,12 +20,11 @@ subChar abc1 char abc2 | isUpper char = toUpper $ abc1!!pos (toLower char) abc2
                        | isLower char = abc1!!pos char abc2
                        | otherwise = char
 
-posImp :: Int -> Char -> [Char] -> Int
-posImp _ _ [] = -1
-posImp i c (a1:a) = if c == a1 then i else posImp (i+1) c a
-
 pos :: Char -> [Char] -> Int
-pos = posImp 0
+pos = core 0
+    where core = \i c l -> case l of
+            [] -> -1
+            (a1:a) -> if c == a1 then i else core (i+1) c a
 
 shift :: Char -> [Char] -> Int -> Char
 shift c a n = head $ drop ((pos c a + n) `mod` length a) a
@@ -43,13 +41,13 @@ zipKey (a1:a) (b1:b) | isPunctuation a1 = (a1, 0) : zipKey a (b1:b)
                      | otherwise = (a1, b1) : zipKey a b
 
 cesar :: [Char] -> Int -> Bool -> [Char]
-cesar m k op = [shiftAlpha c $ if op then k else k * (-1) | c <- m]
-
-vigenere :: [Char] -> [Char] -> Bool -> [Char]
-vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
-    where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
+cesar m k op = [shiftAlpha c $ if op then k else k * (-1) | c <- m] 
 
 substitute :: [Char] -> [Char] -> Bool -> [Char]
 substitute sms str op = [subChar key x abc | x <- sms]
            where key = if op then abcSub str else ['a'..'z']
                  abc = if op then ['a'..'z'] else abcSub str
+
+vigenere :: [Char] -> [Char] -> Bool -> [Char]
+vigenere m k op = [shiftAlpha c n | (c,n) <- zipKey m key]
+    where key = cycle $ map (\x -> pos x ['A'..'Z'] * if op then 1 else -1) k
